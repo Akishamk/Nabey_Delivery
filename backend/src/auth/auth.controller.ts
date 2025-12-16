@@ -1,13 +1,12 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private auth: AuthService) {}
+  constructor(private authService: AuthService) {}
 
-  @Post('login')
-  async login(@Body('phone_number') phone_number: string) {
-    if (!phone_number) return { error: 'phone_number required' };
-    return this.auth.registerOrLogin(phone_number);
+  @Post('phone')
+  login(@Body('phoneNumber') phoneNumber: string) {
+    return this.authService.registerOrLogin(phoneNumber);
   }
 }

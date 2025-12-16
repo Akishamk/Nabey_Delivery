@@ -1,32 +1,40 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export enum UserRole {
-  CUSTOMER = 'customer',
+  USER = 'user',
   DRIVER = 'driver',
   MERCHANT = 'merchant',
-  ADMIN = 'admin'
+  ADMIN = 'admin',
 }
 
-@Entity({ schema: process.env.DB_SCHEMA || 'delivery_app', name: 'users' })
+@Entity({ name: 'users', schema: 'delivery_app' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
-  phone_number: string;
+  @Column({ name: 'phone_number', unique: true })
+  phoneNumber: string;
 
-  @Column({ nullable: true })
-  name: string;
-
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.CUSTOMER })
+  @Column({
+    name: 'role',
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
   role: UserRole;
 
-  @Column({ default: true })
-  is_active: boolean;
+  @Column({ name: 'is_active', default: true })
+  isActive: boolean;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }

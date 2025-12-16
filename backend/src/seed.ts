@@ -25,7 +25,7 @@ async function seed() {
   const merchantRepo = AppDataSource.getRepository(Merchant);
   const productRepo = AppDataSource.getRepository(Product);
 
-  const u = userRepo.create({ phone_number: '+251900000001', name: 'Test User' });
+  const u = userRepo.create({ phoneNumber: '+251900000001' });
   await userRepo.save(u);
 
   const m = merchantRepo.create({ name: 'Tasty Pizza', description: 'Best pizza', address_text: 'Main St' });

@@ -39,12 +39,10 @@ async function run() {
         console.log('No users found in database; creating a minimal seed user...');
         // Create a minimal user using common columns found in this DB
         const phone = process.env.SEED_USER_PHONE || '0000000000';
-        const email = process.env.SEED_USER_EMAIL || 'seed-owner@example.com';
-        const full_name = process.env.SEED_USER_NAME || 'Seed Owner';
         const role = process.env.SEED_USER_ROLE || 'merchant';
         const insertRes: any = await dataSource.query(
-          `INSERT INTO ${schema}.users(phone, email, full_name, role, is_active) VALUES($1,$2,$3,$4,$5) RETURNING id`,
-          [phone, email, full_name, role, true]
+          `INSERT INTO ${schema}.users(phone_number, role, is_active) VALUES($1,$2,$3) RETURNING id`,
+          [phone, role, true]
         );
         if (insertRes && insertRes[0] && insertRes[0].id) {
           ownerId = insertRes[0].id;
@@ -63,8 +61,8 @@ async function run() {
     let merchant = await merchantRepo.findOneBy({ name: 'Seed Merchant' } as any);
     if (!merchant) {
       const insertRes: any = await dataSource.query(
-        `INSERT INTO ${schema}.merchants(owner_user_id, name, description, address_text) VALUES($1,$2,$3,$4) RETURNING *`,
-        [ownerId, 'Seed Merchant', 'Auto-generated merchant by seed script', 'Seed address']
+        `INSERT INTO ${schema}.merchants(name, description, address_text) VALUES($1,$2,$3) RETURNING *`,
+        ['Seed Merchant', 'Auto-generated merchant by seed script', 'Seed address']
       );
       merchant = insertRes && insertRes[0] ? insertRes[0] : null;
       console.log('Created merchant via raw SQL insert:', merchant ? merchant.id : merchant);
